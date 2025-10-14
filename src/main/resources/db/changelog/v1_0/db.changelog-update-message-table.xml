@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
+
+    <!-- Изменяем длину возможных ролей с 10 до 9 -->
+    <changeSet id="4-update-role-type" author="vladimir">
+        <modifyDataType tableName="messages" columnName="role" newDataType="VARCHAR(9)"/>
+    </changeSet>
+
+</databaseChangeLog>
