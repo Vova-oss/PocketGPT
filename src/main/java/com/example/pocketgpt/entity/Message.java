@@ -2,7 +2,9 @@ package com.example.pocketgpt.entity;
 
 import com.example.pocketgpt.entity.enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "messages")
