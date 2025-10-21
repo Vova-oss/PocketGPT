@@ -1,9 +1,7 @@
-package com.example.pocketgpt.entity;
+package com.example.pocketgpt.db.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,12 +10,17 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class User {
 
     @Id
     @Column(name = "telegram_id", nullable = false, unique = true)
     private Long telegramId;
+
+    @Column(name = "chat_id")
+    private Long chatId;
 
     @Column(name = "username")
     private String username;
@@ -33,7 +36,6 @@ public class User {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Message> messages;

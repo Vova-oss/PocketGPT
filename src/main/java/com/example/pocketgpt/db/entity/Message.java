@@ -1,6 +1,6 @@
-package com.example.pocketgpt.entity;
+package com.example.pocketgpt.db.entity;
 
-import com.example.pocketgpt.entity.enums.Role;
+import com.example.pocketgpt.db.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

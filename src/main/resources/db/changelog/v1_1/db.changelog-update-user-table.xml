@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
+
+    <changeSet id="5-add-chat_id-and-state" author="vladimir">
+        
+        <addColumn tableName="users">
+            <column name="chat_id" type="BIGINT"/>
+        </addColumn>
+        
+        <addColumn tableName="users">
+            <column name="state" type="VARCHAR(20)"/>
+        </addColumn>
+
+        <!-- Ограничение на возможные значения в колонке state -->
+        <sql>
+            ALTER TABLE users
+            ADD CONSTRAINT check_users_state
+            CHECK (state IN ('IDLE', 'AWAITING_CHAT_NAME'));
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

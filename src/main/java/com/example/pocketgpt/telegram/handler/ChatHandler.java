@@ -1,5 +1,6 @@
 package com.example.pocketgpt.telegram.handler;
 
+import com.example.pocketgpt.telegram.mapper.dto.TelegramUserInfo;
 import com.example.pocketgpt.telegram.sender.TelegramBotSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,11 @@ public class ChatHandler {
 
     private final TelegramBotSender sender;
 
-    public void handleUserMessage(Long chatId, String text) {
-        sender.sendText(chatId, "Ты отправил сообщение в GPT.");
+    public void handleUserMessage(TelegramUserInfo userInfo) {
+
+
+
+        sender.sendText(userInfo.getChatId(), "Ты отправил сообщение в GPT.");
     }
 
 }

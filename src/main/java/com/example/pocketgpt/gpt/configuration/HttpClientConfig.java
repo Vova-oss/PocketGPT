@@ -1,4 +1,4 @@
-package com.example.pocketgpt.configuration;
+package com.example.pocketgpt.gpt.configuration;
 
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;

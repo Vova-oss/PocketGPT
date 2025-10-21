@@ -1,4 +1,4 @@
-package com.example.pocketgpt.entity.enums;
+package com.example.pocketgpt.db.entity.enums;
 
 import lombok.Getter;
 

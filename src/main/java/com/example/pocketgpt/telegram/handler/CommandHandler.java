@@ -1,6 +1,6 @@
 package com.example.pocketgpt.telegram.handler;
 
-import com.example.pocketgpt.telegram.model.TelegramCommand;
+import com.example.pocketgpt.telegram.mapper.dto.TelegramUserInfo;
 import com.example.pocketgpt.telegram.sender.TelegramBotSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ public class CommandHandler {
 
     private final TelegramBotSender sender;
 
-    public void handleCommand(Long chatId, TelegramCommand command) {
-        switch (command){
-            case START -> sender.sendMenu(chatId);
-            default -> sender.sendText(chatId, "Неизвестная команда...");
+    public void handleCommand(TelegramUserInfo userInfo) {
+        switch (userInfo.getCommand()){
+            case START -> sender.sendMenu(userInfo.getChatId());
+            default -> sender.sendText(userInfo.getChatId(), "Неизвестная команда...");
         }
     }
 
