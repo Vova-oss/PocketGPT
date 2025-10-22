@@ -1,9 +1,10 @@
 package com.example.pocketgpt.telegram.service;
 
+import com.example.pocketgpt.db.domain.UserManager;
 import com.example.pocketgpt.telegram.handler.CallbackHandler;
 import com.example.pocketgpt.telegram.handler.ChatHandler;
 import com.example.pocketgpt.telegram.handler.CommandHandler;
-import com.example.pocketgpt.telegram.model.TelegramCommand;
+import com.example.pocketgpt.telegram.mapper.TelegramMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -18,17 +19,20 @@ public class TelegramService {
 
     private final CommandHandler commandHandler;
 
+    private final TelegramMapper  telegramMapper;
+
+    private final UserManager userManager;
+
     public void handleMessage(Update update){
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String text = update.getMessage().getText();
-            Long chatId = update.getMessage().getChatId();
+            var userInfo = telegramMapper.toTelegramUserInfo(update);
 
-            var command = TelegramCommand.fromText(text);
+            userManager.authorizationUser(userInfo);
 
-            if (command != null){
-                commandHandler.handleCommand(chatId, command);
+            if (userInfo.getCommand() != null){
+                commandHandler.handleCommand(userInfo);
             } else {
-                chatHandler.handleUserMessage(chatId, text);
+                chatHandler.handleUserMessage(userInfo);
             }
 
         } else if (update.hasCallbackQuery()) {

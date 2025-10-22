@@ -1,7 +1,7 @@
-package com.example.pocketgpt.controller;
+package com.example.pocketgpt.gpt.controller;
 
 
-import com.example.pocketgpt.service.OpenAiService;
+import com.example.pocketgpt.gpt.service.OpenAiService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

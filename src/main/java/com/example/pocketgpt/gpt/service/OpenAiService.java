@@ -1,4 +1,4 @@
-package com.example.pocketgpt.service;
+package com.example.pocketgpt.gpt.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

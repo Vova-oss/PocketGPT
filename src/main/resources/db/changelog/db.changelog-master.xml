@@ -7,5 +7,6 @@
 
     <include file="/db/changelog/init/db.changelog-create-tables.xml"/>
     <include file="/db/changelog/v1_0/db.changelog-update-message-table.xml"/>
+    <include file="/db/changelog/v1_1/db.changelog-update-user-table.xml"/>
 
 </databaseChangeLog>
