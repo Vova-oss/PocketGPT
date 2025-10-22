@@ -18,8 +18,8 @@ public class Message {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "telegram_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 10)
@@ -27,4 +27,5 @@ public class Message {
 
     @Column(name = "message_text", columnDefinition = "TEXT")
     private String messageText;
+
 }

@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class TelegramUserInfo {
 
-    private Long telegramId;
+    private Long tgId;
 
     private Long chatId;
 

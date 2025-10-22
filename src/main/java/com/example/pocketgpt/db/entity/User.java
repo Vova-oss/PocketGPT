@@ -1,9 +1,11 @@
 package com.example.pocketgpt.db.entity;
 
+import com.example.pocketgpt.db.entity.enums.UserState;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,11 +18,11 @@ import java.util.List;
 public class User {
 
     @Id
-    @Column(name = "telegram_id", nullable = false, unique = true)
-    private Long telegramId;
+    @Column(name = "tg_id", nullable = false, unique = true)
+    private Long tgId;
 
-    @Column(name = "chat_id")
-    private Long chatId;
+    @Column(name = "tg_chat_id")
+    private Long tgChatId;
 
     @Column(name = "username")
     private String username;
@@ -34,11 +36,15 @@ public class User {
     @Column(name = "language_code", length = 10)
     private String languageCode;
 
+    @Column(name = "state", length = 20)
+    @Enumerated(EnumType.STRING)
+    private UserState state = UserState.IDLE;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Message> messages;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Chat> chats = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

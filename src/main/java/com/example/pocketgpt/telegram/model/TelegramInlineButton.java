@@ -7,6 +7,8 @@ import java.util.Arrays;
 @Getter
 public enum TelegramInlineButton {
 
+    DIALOG_WITHOUT_CONTEXT("dialog_without_context", "Диалог без контекста"),
+
     LIST_DIALOGS("list_dialogs", "Мои диалоги"),
 
     NEW_DIALOG("new_dialog", "Новый диалог"),

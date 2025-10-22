@@ -9,7 +9,7 @@ public class UserMapper {
         return User.builder()
                 .username(telegramUserInfo.getUsername())
                 .firstName(telegramUserInfo.getFirstName())
-                .telegramId(telegramUserInfo.getTelegramId())
+                .tgId(telegramUserInfo.getTgId())
                 .lastName(telegramUserInfo.getLastName())
                 .build();
     }

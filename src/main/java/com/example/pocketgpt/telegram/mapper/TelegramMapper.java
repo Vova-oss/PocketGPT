@@ -14,7 +14,7 @@ public class TelegramMapper {
         var messageText = message.getText();
 
         return TelegramUserInfo.builder()
-                .telegramId(from.getId())
+                .tgId(from.getId())
                 .firstName(from.getFirstName())
                 .lastName(from.getLastName())
                 .username(from.getUserName())

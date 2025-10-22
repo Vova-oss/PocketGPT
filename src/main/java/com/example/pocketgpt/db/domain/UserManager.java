@@ -13,7 +13,7 @@ public class UserManager {
     private final UserService userService;
 
     public void authorizationUser(TelegramUserInfo userInfo) {
-        var user = userService.findByTelegramId(userInfo.getTelegramId());
+        var user = userService.findByTgId(userInfo.getTgId());
 
         if (user == null) {
             user = UserMapper.toUser(userInfo);

@@ -15,10 +15,24 @@ public class ChatHandler {
     private final TelegramBotSender sender;
 
     public void handleUserMessage(TelegramUserInfo userInfo) {
+        if (isNeedToCreateNewChat()) {
+            createAndStartNewChat(userInfo);
+            return;
+        }
+
+
 
 
 
         sender.sendText(userInfo.getChatId(), "Ты отправил сообщение в GPT.");
+    }
+
+    private boolean isNeedToCreateNewChat() {
+        return false;
+    }
+
+    private void createAndStartNewChat(TelegramUserInfo userInfo) {
+        sender.sendText(userInfo.getChatId(), "Новый чат создан! Что хочешь обсудить?");
     }
 
 }

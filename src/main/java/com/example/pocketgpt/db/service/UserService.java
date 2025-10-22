@@ -13,14 +13,14 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Cacheable(value = "users", key = "#telegramId")
-    public User findByTelegramId(Long telegramId) {
+    @Cacheable(value = "users", key = "#tgId")
+    public User findByTgId(Long tgId) {
         return userRepository
-                .findByTelegramId(telegramId)
+                .findByTgId(tgId)
                 .orElse(null);
     }
 
-    @CachePut(value = "users", key = "#result.telegramId")
+    @CachePut(value = "users", key = "#result.tgId")
     public User save(User user) {
         return userRepository.save(user);
     }
