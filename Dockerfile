@@ -1,5 +1,6 @@
 # Используем публичный образ OpenJDK 18
-FROM openjdk:18-jdk
+FROM registry.access.redhat.com/ubi8/openjdk-18:latest
+
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
