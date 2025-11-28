@@ -1,6 +1,5 @@
 # Используем публичный образ OpenJDK 18
-FROM registry.access.redhat.com/ubi8/openjdk-18:latest
-
+FROM eclipse-temurin:18-jdk
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
