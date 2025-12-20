@@ -1,18 +1,20 @@
 package com.example.pocketgpt.db.mapper;
 
 import com.example.pocketgpt.db.entity.User;
-import com.example.pocketgpt.telegram.mapper.dto.TelegramUserInfo;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class UserMapper {
 
-    public static User toUser(TelegramUserInfo telegramUserInfo) {
+    public static User toUser(Update update) {
+        var message = update.getMessage();
+        var from = message.getFrom();
+
         return User.builder()
-                .username(telegramUserInfo.getUsername())
-                .firstName(telegramUserInfo.getFirstName())
-                .tgId(telegramUserInfo.getTgId())
-                .lastName(telegramUserInfo.getLastName())
+                .username(from.getUserName())
+                .firstName(from.getFirstName())
+                .tgId(from.getId())
+                .lastName(from.getUserName())
                 .build();
     }
-
 
 }

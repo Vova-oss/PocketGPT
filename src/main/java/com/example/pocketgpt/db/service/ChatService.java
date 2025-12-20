@@ -4,7 +4,6 @@ import com.example.pocketgpt.db.entity.Chat;
 import com.example.pocketgpt.db.entity.enums.ChatStatus;
 import com.example.pocketgpt.db.repository.ChatRepository;
 import com.example.pocketgpt.telegram.context.TelegramContext;
-import com.example.pocketgpt.telegram.mapper.dto.TelegramUserInfo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,10 +36,11 @@ public class ChatService {
     }
 
     @Transactional
-    public Optional<Chat> saveDraftChatWithNewName(TelegramUserInfo userInfo,Long tgId){
+    public Optional<Chat> saveDraftChatWithNewName(){
+        var tgId = TelegramContext.get().getTgId();
         var draftChat = chatRepository.findDraftChatByTgId(tgId);
         draftChat.ifPresent(chat -> {
-            chat.setName(userInfo.getMessageText());
+            chat.setName(TelegramContext.get().getMessage());
             chat.setStatus(ChatStatus.ACTIVE);
             chatRepository.save(chat);
         });
