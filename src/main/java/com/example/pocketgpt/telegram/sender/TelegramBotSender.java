@@ -1,5 +1,6 @@
 package com.example.pocketgpt.telegram.sender;
 
+import com.example.pocketgpt.telegram.context.TelegramContext;
 import com.example.pocketgpt.telegram.model.TelegramInlineButton;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,10 @@ public class TelegramBotSender extends DefaultAbsSender {
         super(options, botToken);
     }
 
-    public void sendText(Long chatId, String text) {
+    public void sendText(String text) {
         try {
             execute(SendMessage.builder()
-                    .chatId(chatId)
+                    .chatId(TelegramContext.get().getChatId())
                     .text(text)
                     .build());
         } catch (TelegramApiException e) {
@@ -32,23 +33,24 @@ public class TelegramBotSender extends DefaultAbsSender {
         }
     }
 
-    public void sendMenu(Long chatId) {
+    public void sendMenu() {
         InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
                 .keyboard(List.of(
                         List.of(
-                                buildInlineButton(NEW_DIALOG),
-                                buildInlineButton(LIST_DIALOGS),
-                                buildInlineButton(CONTINUE_DIALOG)
+                                buildInlineButton(NEW_DIALOG)
                         ),
                         List.of(
-                                buildInlineButton(DELETE_DIALOG)
+                                buildInlineButton(LIST_DIALOGS)
+                        ),
+                        List.of(
+                                buildInlineButton(DIALOG_WITHOUT_CONTEXT)
                         )
                 ))
                 .build();
 
         try {
             execute(SendMessage.builder()
-                    .chatId(chatId)
+                    .chatId(TelegramContext.get().getChatId())
                     .text("Выберите действие:")
                     .replyMarkup(markup)
                     .build());

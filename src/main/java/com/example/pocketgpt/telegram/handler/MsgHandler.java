@@ -1,5 +1,7 @@
 package com.example.pocketgpt.telegram.handler;
 
+import com.example.pocketgpt.db.service.ChatService;
+import com.example.pocketgpt.telegram.context.TelegramContext;
 import com.example.pocketgpt.telegram.mapper.dto.TelegramUserInfo;
 import com.example.pocketgpt.telegram.sender.TelegramBotSender;
 import lombok.RequiredArgsConstructor;
@@ -10,29 +12,25 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class ChatHandler {
+public class MsgHandler {
 
     private final TelegramBotSender sender;
 
+    private final ChatService chatService;
+
     public void handleUserMessage(TelegramUserInfo userInfo) {
-        if (isNeedToCreateNewChat()) {
-            createAndStartNewChat(userInfo);
+        var tgId = TelegramContext.get().getTgId();
+
+        var createdChat = chatService.saveDraftChatWithNewName(userInfo, tgId);
+        if (createdChat.isPresent()){
+            sender.sendText("Новый чат создан! Что хочешь обсудить?");
             return;
         }
 
 
-
-
-
-        sender.sendText(userInfo.getChatId(), "Ты отправил сообщение в GPT.");
+        sender.sendText("Ты отправил сообщение в GPT.");
     }
 
-    private boolean isNeedToCreateNewChat() {
-        return false;
-    }
 
-    private void createAndStartNewChat(TelegramUserInfo userInfo) {
-        sender.sendText(userInfo.getChatId(), "Новый чат создан! Что хочешь обсудить?");
-    }
 
 }

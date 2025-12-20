@@ -16,8 +16,8 @@ public class CommandHandler {
 
     public void handleCommand(TelegramUserInfo userInfo) {
         switch (userInfo.getCommand()){
-            case START -> sender.sendMenu(userInfo.getChatId());
-            default -> sender.sendText(userInfo.getChatId(), "Неизвестная команда...");
+            case START -> sender.sendMenu();
+            default -> sender.sendText("Неизвестная команда...");
         }
     }
 

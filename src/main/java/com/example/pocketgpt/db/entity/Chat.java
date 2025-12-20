@@ -30,7 +30,7 @@ public class Chat {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private ChatStatus status = ChatStatus.ACTIVE;
+    private ChatStatus status = ChatStatus.DRAFT;
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
