@@ -13,8 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-import static com.example.pocketgpt.telegram.model.TelegramInlineButton.*;
-
 @Service
 public class TelegramBotSender extends DefaultAbsSender {
 
@@ -33,25 +31,15 @@ public class TelegramBotSender extends DefaultAbsSender {
         }
     }
 
-    public void sendMenu() {
+    public void sendInlineKeyboard(List<List<InlineKeyboardButton>> keyboard, String commonText) {
         InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
-                .keyboard(List.of(
-                        List.of(
-                                buildInlineButton(NEW_DIALOG)
-                        ),
-                        List.of(
-                                buildInlineButton(LIST_DIALOGS)
-                        ),
-                        List.of(
-                                buildInlineButton(DIALOG_WITHOUT_CONTEXT)
-                        )
-                ))
+                .keyboard(keyboard)
                 .build();
 
         try {
             execute(SendMessage.builder()
                     .chatId(TelegramContext.get().getChatId())
-                    .text("Выберите действие:")
+                    .text(commonText)
                     .replyMarkup(markup)
                     .build());
         } catch (TelegramApiException e) {
@@ -59,10 +47,18 @@ public class TelegramBotSender extends DefaultAbsSender {
         }
     }
 
-    private InlineKeyboardButton buildInlineButton(TelegramInlineButton inlineButton){
+
+    public static InlineKeyboardButton buildInlineButton(TelegramInlineButton inlineButton){
         return InlineKeyboardButton.builder()
                 .text(inlineButton.getMessage())
-                .callbackData(inlineButton.getUrl())
+                .callbackData(inlineButton.getCallback())
+                .build();
+    }
+
+    public static InlineKeyboardButton buildInlineButton(String text, String callbackData){
+        return InlineKeyboardButton.builder()
+                .text(text)
+                .callbackData(callbackData)
                 .build();
     }
 }

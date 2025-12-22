@@ -1,34 +1,41 @@
 package com.example.pocketgpt.telegram.model;
 
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 
 @Getter
 public enum TelegramInlineButton {
 
-    DIALOG_WITHOUT_CONTEXT("dialog_without_context", "Диалог без контекста"),
+    CHAT_WITHOUT_CONTEXT("chat_without_context", "Чат без контекста"),
 
-    LIST_DIALOGS("list_dialogs", "Мои диалоги"),
+    LIST_CHATS("list_chats", "Мои чаты"),
 
-    NEW_DIALOG("new_dialog", "Новый диалог"),
+    NEW_CHAT("new_chat", "Новый чат"),
 
-    DELETE_DIALOG("delete_dialog", "Удалить диалог"),
+    WORK_WITH_CHAT("work_with_chat:", StringUtils.EMPTY),
 
-    CONTINUE_DIALOG("continue_dialog", "Продолжить диалог");
+    CONTINUE_CHAT("continue_chat:", "Продолжить чат"),
 
-    private final String url;
+    DELETE_CHAT("delete_chat:", "Удалить чат"),
+
+    YES_DELETE_CHAT("yes_delete_chat:", "Да, удалить этот чат"),
+
+    NO_DONT_DELETE_CHAT("no_dont_delete_chat", "Нет, оставить этот чат");
+
+    private final String callback;
 
     private final String message;
 
-    TelegramInlineButton(String url, String message) {
-        this.url = url;
+    TelegramInlineButton(String callback, String message) {
+        this.callback = callback;
         this.message = message;
     }
 
     public static TelegramInlineButton fromData(String data) {
         return Arrays.stream(values())
-                .filter(enumButton -> enumButton.getUrl().equalsIgnoreCase(data))
+                .filter(enumButton -> data.startsWith(enumButton.getCallback()))
                 .findFirst()
                 .orElse(null);
     }

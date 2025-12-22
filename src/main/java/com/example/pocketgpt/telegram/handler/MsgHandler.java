@@ -18,14 +18,23 @@ public class MsgHandler {
 
     public void handleUserMessage() {
         var createdChat = chatService.saveDraftChatWithNewName();
-        if (createdChat.isPresent()){
+        if (createdChat.isPresent()) {
             sender.sendText("Новый чат создан! Что хочешь обсудить?");
+            return;
+        }
+
+        var activeChat = chatService.getActiveChatIfExists();
+        if (activeChat.isPresent()) {
+            // Запрос в GPT с последними 10 сообщениями
+            sender.sendText("Запрос в GPT с последними 10 сообщениями");
             return;
         }
 
 
 
-        sender.sendText("Ты отправил сообщение в GPT.");
+
+
+        sender.sendText("Ты отправил сообщение в GPT вне контекста.");
     }
 
 }
