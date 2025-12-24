@@ -1,4 +1,4 @@
-package com.example.pocketgpt.gpt.temptest;
+package com.example.pocketgpt;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +10,7 @@ public class TestController {
 
     @GetMapping
     public String testService() {
-        return "Service is working correctly!";
+        return "Service is working correctly! By by bla bla";
     }
 
 }

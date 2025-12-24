@@ -4,20 +4,27 @@ import com.example.pocketgpt.db.entity.Chat;
 import com.example.pocketgpt.db.entity.enums.ChatStatus;
 import com.example.pocketgpt.db.repository.ChatRepository;
 import com.example.pocketgpt.telegram.context.TelegramContext;
+import com.example.pocketgpt.telegram.model.TgResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.pocketgpt.db.entity.enums.ChatStatus.DRAFT;
+
 @Service
 @RequiredArgsConstructor
 public class ChatService {
 
-    private ChatRepository chatRepository;
+    @Value("${max.amount.of.chats.by.user}")
+    private long maxAmountOfChats;
 
-    private UserService userService;
+    private final ChatRepository chatRepository;
+
+    private final UserService userService;
 
     @Transactional
     public void deactivateActiveChatsByUserId(){
@@ -25,15 +32,26 @@ public class ChatService {
     }
 
     @Transactional
-    public void createNewChat() {
+    public TgResponse createNewChat() {
         var tgId = TelegramContext.get().getTgId();
-        var chats = chatRepository.findDraftChatByUserId(tgId);
-        if (chats.isEmpty()){
+        var allChats = chatRepository.findAllChatsByUserId(tgId);
+
+        var draftChat = allChats.stream()
+                .filter(chat -> DRAFT == chat.getStatus())
+                .findFirst();
+
+        if (allChats.size() >= maxAmountOfChats && draftChat.isEmpty()) {
+            return TgResponse.messageMaxAmountOfChats();
+        }
+
+        if (draftChat.isEmpty()){
             var user = userService.findByTgId(tgId);
             var chat = new Chat();
             chat.setUser(user);
             chatRepository.save(chat);
         }
+
+        return TgResponse.messageWriteNameOfNewChat();
     }
 
     @Transactional
@@ -44,6 +62,7 @@ public class ChatService {
             chat.setName(TelegramContext.get().getMessage());
             chat.setStatus(ChatStatus.ACTIVE);
             chatRepository.save(chat);
+            chatRepository.deactivateActiveChatsByUserId(TelegramContext.get().getTgId());
         });
         return draftChat;
     }
@@ -55,13 +74,14 @@ public class ChatService {
     }
 
     @Transactional
-    public List<Chat> findAllDialogsByUser() {
+    public List<Chat> findNotDraftChatsByUser() {
         var tgId = TelegramContext.get().getTgId();
-        return chatRepository.findChatsByUserId(tgId);
+        return chatRepository.findNotDraftChatsByUserId(tgId);
     }
 
     @Transactional
     public void activateChatById(String chatId) {
+        chatRepository.deactivateActiveChatsByUserId(TelegramContext.get().getTgId());
         chatRepository.activateChatById(Long.valueOf(chatId));
     }
 

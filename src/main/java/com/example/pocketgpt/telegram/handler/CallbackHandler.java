@@ -28,7 +28,7 @@ public class CallbackHandler {
 
         switch (telegramInlineButton) {
             case CHAT_WITHOUT_CONTEXT -> chatWithoutContext();
-            case NEW_CHAT -> newDialog();
+            case NEW_CHAT -> newChat();
             case LIST_CHATS -> listOfChats();
             case WORK_WITH_CHAT -> workWithChat();
             case CONTINUE_CHAT -> continueChat();
@@ -43,16 +43,16 @@ public class CallbackHandler {
         sender.sendText("Привет! О чём хочешь поговорить?");
     }
 
-    private void newDialog() {
-        chatService.createNewChat();
-        sender.sendText("Придумай название диалога");
+    private void newChat() {
+        var tgResponse = chatService.createNewChat();
+        sender.sendText(tgResponse.getReply());
     }
 
     private void listOfChats() {
-        var chats = chatService.findAllDialogsByUser();
+        var chats = chatService.findNotDraftChatsByUser();
         var inlineChats = chats.stream()
                 .map(chat -> List.of(
-                        buildInlineButton(chat.getName(), WORK_WITH_CHAT.getCallback() + chat.getId() + ":" + chat.getName())
+                        buildInlineButton(chat.getName(), WORK_WITH_CHAT.getCallback() + chat.getId())
                 ))
                 .toList();
 
@@ -62,19 +62,18 @@ public class CallbackHandler {
     private void workWithChat() {
         var userMessage = TelegramContext.get().getMessage().split(":");
         var chatId = userMessage[1];
-        var chatName = userMessage[2];
         
         var inlineKeyboard = List.of(
                 List.of(
                         buildInlineButton( 
                                 CONTINUE_CHAT.getMessage(),
-                                CONTINUE_CHAT.getCallback() + chatId + ":" + chatName
+                                CONTINUE_CHAT.getCallback() + chatId
                         )
                 ),
                 List.of(
                         buildInlineButton(
                                 DELETE_CHAT.getMessage(),
-                                DELETE_CHAT.getCallback() + chatId + ":" + chatName
+                                DELETE_CHAT.getCallback() + chatId
                         )
                 )               
         );
@@ -83,43 +82,44 @@ public class CallbackHandler {
     }
 
     private void continueChat() {
-        var userMessage = TelegramContext.get().getMessage().split(":");
+        var context = TelegramContext.get();
+        var userMessage = context.getMessage().split(":");
         var chatId = userMessage[1];
-        var chatName = userMessage[2];
         chatService.activateChatById(chatId);
-        sender.sendText(String.format("Вы продолжаете чат \"%s\"", chatName));
+
+        sender.sendText("Вы продолжаете чат");
     }
     
     private void clarificationAboutDeletingChat(){
-        var userMessage = TelegramContext.get().getMessage().split(":");
+        var context = TelegramContext.get();
+        var userMessage = context.getMessage().split(":");
         var chatId = userMessage[1];
-        var chatName = userMessage[2];
 
         var inlineKeyboard = List.of(
                 List.of(
                         buildInlineButton(
                                 YES_DELETE_CHAT.getMessage(),
-                                YES_DELETE_CHAT.getCallback() + chatId + ":" + chatName
+                                YES_DELETE_CHAT.getCallback() + chatId
                         )
                 ),
                 List.of(
                         buildInlineButton(
                                 NO_DONT_DELETE_CHAT.getMessage(),
-                                NO_DONT_DELETE_CHAT.getCallback() + chatId + ":" + chatName
+                                NO_DONT_DELETE_CHAT.getCallback() + chatId
                         )
                 )
         );
 
-        sender.sendInlineKeyboard(inlineKeyboard, String.format("Вы уверены, что хотите удалить чат \"%s\"?", chatName));
+        sender.sendInlineKeyboard(inlineKeyboard, "Вы уверены, что хотите удалить этот чат?");
     }
 
     private void permanentlyDeletingChat() {
-        var userMessage = TelegramContext.get().getMessage().split(":");
+        var context = TelegramContext.get();
+        var userMessage = context.getMessage().split(":");
         var chatId = userMessage[1];
-        var chatName = userMessage[2];
 
         chatService.deleteChatById(chatId);
-        sender.sendText(String.format("Чат \"%s\" был удалён", chatName));
+        sender.sendText("Чат был удалён");
     }
 
 

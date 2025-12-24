@@ -5,9 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
 
-    <include file="/db/changelog/init/db.changelog-create-tables.xml"/>
-    <include file="/db/changelog/v1_0/db.changelog-update-message-table.xml"/>
-    <include file="/db/changelog/v1_1/db.changelog-update-user-table.xml"/>
-    <include file="/db/changelog/v1_2/db.changelog-update-chats-table.xml"/>
+    <changeSet id="9-remove-constraint-on-name-column-in-chats-table" author="vladimir">
+        <dropNotNullConstraint tableName="chats" columnName="name"/>
+    </changeSet>
 
 </databaseChangeLog>

@@ -23,8 +23,11 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Query(nativeQuery = true, value = "select * from chats where user_id = :userId and status = 'ACTIVE'")
     Optional<Chat> findActiveChatByUserId(@Param("userId") Long userId);
 
+    @Query(nativeQuery = true, value = "select * from chats where user_id = :userId and status != 'DRAFT'")
+    List<Chat> findNotDraftChatsByUserId(@Param("userId") Long userId);
+
     @Query(nativeQuery = true, value = "select * from chats where user_id = :userId")
-    List<Chat> findChatsByUserId(@Param("userId") Long userId);
+    List<Chat> findAllChatsByUserId(@Param("userId") Long userId);
 
     @Modifying
     @Query(nativeQuery = true, value = "update chats set status = 'ACTIVE' where id = :id")
